@@ -1,0 +1,2 @@
+# Script to process a JSON file that represents exported Skype conversations. One can retrieve the file from skype.com
+jq -c '.conversations | .[]' messages.json | while read -r line; do id="$(echo "$line" | jq '.id' | cut -d':' -f2 | cut -d'"' -f1)" && echo "$line" | jq '.MessageList | reverse | .[] | {from: .from, originalarrivaltime: .originalarrivaltime, content: .content}' > skype_conversations_"$id".json; done
